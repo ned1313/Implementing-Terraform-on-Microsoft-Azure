@@ -1,0 +1,8 @@
+steps:
+- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  displayName: 'terraform apply'
+  inputs:
+    command: apply
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_globomantics-network/networking'
+    environmentServiceName: 'PS (fd77a48f-d4f2-47ef-b289-661a4c4432c7)'
+    commandOptions: main.tfplan

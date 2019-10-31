@@ -1,0 +1,18 @@
+variables:
+  state_resource_group: 'itma-state'
+  state_sa_account: 'itma36517'
+  state_container: 'terraform-state'
+  state_key: 'terraform.tfstate'
+
+steps:
+- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  displayName: 'terraform init'
+  inputs:
+    command: init
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_globomantics-network/networking'
+    backendType: azurerm
+    backendServiceArm: 'PS (fd77a48f-d4f2-47ef-b289-661a4c4432c7)'
+    backendAzureRmResourceGroupName: '$(state_resource_group)'
+    backendAzureRmStorageAccountName: '$(state_sa_account)'
+    backendAzureRmContainerName: '$(state_container)'
+    backendAzureRmKey: '$(state_key)'

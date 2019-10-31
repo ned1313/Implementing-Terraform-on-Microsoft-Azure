@@ -1,0 +1,8 @@
+steps:
+- task: Bash@3
+  displayName: 'Bash Script'
+  inputs:
+    targetType: filePath
+    filePath: './$(System.DefaultWorkingDirectory)/_globomantics-network/networking/workspacetest.sh'
+    arguments: '$(Release.EnvironmentName)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_globomantics-network/networking'

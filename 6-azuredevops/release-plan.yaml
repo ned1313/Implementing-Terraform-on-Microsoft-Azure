@@ -1,0 +1,19 @@
+#Your build pipeline references a secret variable named ‘sec_client_secret’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+variables:
+  resource_group_name: 'main-vnet'
+  sec_sub_id: 'f9a91c0d-940f-4c7d-bf91-123c89917689'
+  sec_client_id: '37f2aed4-de0c-46b4-b561-755198ec9747'
+  sec_vnet_name: 'security'
+  sec_vnet_id: '/subscriptions/f9a91c0d-940f-4c7d-bf91-123c89917689/resourceGroups/security/providers/Microsoft.Network/virtualNetworks/security'
+  sec_resource_group: 'security'
+  sec_principal_id: '456bc11d-56f2-497c-9392-ae34946fdaa4'
+  main_sub_id: 'fd77a48f-d4f2-47ef-b289-661a4c4432c7'
+
+steps:
+- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  displayName: 'terraform plan'
+  inputs:
+    command: plan
+    workingDirectory: '$(System.DefaultWorkingDirectory)/_globomantics-network/networking'
+    environmentServiceName: 'PS (fd77a48f-d4f2-47ef-b289-661a4c4432c7)'
+    commandOptions: '-var sec_client_secret=$(sec_client_secret) -out main.tfplan'

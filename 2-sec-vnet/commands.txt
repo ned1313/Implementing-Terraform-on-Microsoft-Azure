@@ -1,0 +1,21 @@
+#Log into the Azure CLI
+az login
+
+#Create the security environment
+terraform init
+terraform plan -out sec.tfplan
+terraform apply sec.tfplan
+
+cat next-step.txt
+
+#Run the export commands in the text file
+
+#Then run the standard 
+terraform init
+terraform plan -out vnet.tfplan
+terraform apply "vnet.tfplan"
+
+#Now copy in the VNet peering components
+#Rerun the plan and apply to update the config
+terraform plan -out vnet.tfplan
+terraform apply "vnet.tfplan"

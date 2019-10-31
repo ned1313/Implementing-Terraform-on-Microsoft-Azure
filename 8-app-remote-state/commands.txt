@@ -1,0 +1,3 @@
+terraform init
+terraform plan -var resource_group_name=itma-app-state -var naming_prefix=appitma -out state.tfplan
+terraform apply "state.tfplan"

@@ -1,0 +1,4 @@
+terraform init --backend-config=backend-config.txt
+terraform workspace new development
+terraform plan -out app.tfplan
+terraform apply "app.tfplan"
