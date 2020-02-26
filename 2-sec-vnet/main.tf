@@ -38,7 +38,7 @@ data "azurerm_subscription" "current" {}
 #############################################################################
 
 provider "azurerm" {
-
+  version = "~> 1.x"
 }
 
 provider "azuread" {

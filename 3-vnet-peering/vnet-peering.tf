@@ -31,6 +31,7 @@ data "azurerm_subscription" "current" {}
 
 
 provider "azurerm" {
+  version = "~> 1.x"
   alias           = "security"
   subscription_id = var.sec_sub_id
   client_id       = var.sec_client_id
@@ -40,6 +41,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
+  version = "~> 1.x"
   alias                       = "peering"
   subscription_id             = data.azurerm_subscription.current.subscription_id
   client_id                   = var.sec_client_id
