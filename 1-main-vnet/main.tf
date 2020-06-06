@@ -41,6 +41,7 @@ provider "azurerm" {
 
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
+  version             = "1.2.0"
   resource_group_name = var.resource_group_name
   location            = var.location
   vnet_name           = var.resource_group_name

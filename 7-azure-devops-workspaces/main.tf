@@ -64,6 +64,7 @@ resource "azurerm_resource_group" "main" {
 
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
+  version             = "1.2.0"
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
   vnet_name           = azurerm_resource_group.main.name

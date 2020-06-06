@@ -62,6 +62,7 @@ resource "azurerm_resource_group" "sec" {
 
 module "vnet-sec" {
   source              = "Azure/vnet/azurerm"
+  version             = "1.2.0"
   resource_group_name = azurerm_resource_group.sec.name
   location            = var.location
   vnet_name           = azurerm_resource_group.sec.name
