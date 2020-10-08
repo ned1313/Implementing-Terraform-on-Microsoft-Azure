@@ -10,3 +10,5 @@
 
 # .tfplan files
 *.tfplan
+
+*next-step.txt

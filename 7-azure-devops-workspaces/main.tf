@@ -53,21 +53,12 @@ data "template_file" "subnet_prefixes" {
   }
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = local.full_rg_name
-  location = var.location
-
-  tags = {
-    environment = terraform.workspace
-  }
-}
-
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
   version             = "1.2.0"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = local.full_rg_name
   location            = var.location
-  vnet_name           = azurerm_resource_group.main.name
+  vnet_name           = local.full_rg_name
   address_space       = var.vnet_cidr_range[terraform.workspace]
   subnet_prefixes     = data.template_file.subnet_prefixes[*].rendered
   subnet_names        = var.subnet_names
@@ -93,7 +84,7 @@ output "vnet_name" {
 }
 
 output "resource_group_name" {
-  value = azurerm_resource_group.main.name
+  value = local.full_rg_name
 }
 
 

@@ -51,21 +51,12 @@ provider "azuread" {
 
 ## NETWORKING ##
 
-resource "azurerm_resource_group" "sec" {
-  name     = var.sec_resource_group_name
-  location = var.location
-
-  tags = {
-    environment = "security"
-  }
-}
-
 module "vnet-sec" {
   source              = "Azure/vnet/azurerm"
   version             = "1.2.0"
-  resource_group_name = azurerm_resource_group.sec.name
+  resource_group_name = var.sec_resource_group_name
   location            = var.location
-  vnet_name           = azurerm_resource_group.sec.name
+  vnet_name           = var.sec_resource_group_name
   address_space       = var.vnet_cidr_range
   subnet_prefixes     = var.sec_subnet_prefixes
   subnet_names        = var.sec_subnet_names
@@ -135,7 +126,7 @@ echo "export TF_VAR_sec_sub_id=${data.azurerm_subscription.current.subscription_
 echo "export TF_VAR_sec_client_id=${azuread_service_principal.vnet_peering.application_id}" >> next-step.txt
 echo "export TF_VAR_sec_principal_id=${azuread_service_principal.vnet_peering.id}" >> next-step.txt
 echo "export TF_VAR_sec_client_secret='${random_password.vnet_peering.result}'" >> next-step.txt
-echo "export TF_VAR_sec_resource_group=${azurerm_resource_group.sec.name}" >> next-step.txt
+echo "export TF_VAR_sec_resource_group=${var.sec_resource_group_name}" >> next-step.txt
 EOT
   }
 }
@@ -161,5 +152,5 @@ output "service_principal_client_secret" {
 }
 
 output "resource_group_name" {
-  value = azurerm_resource_group.sec.name
+  value = var.sec_resource_group_name
 }
