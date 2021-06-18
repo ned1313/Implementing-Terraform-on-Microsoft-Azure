@@ -1,0 +1,17 @@
+# We're going to launch a Terraform VM into the Security subscription
+az account set -s SEC_SUB_NAME
+
+# Follow the standard Terraform process
+terraform init
+
+terraform plan -out tfvm.tfplan
+
+terraform apply tfvm.tfplan
+
+# The outputs include the public IP address of the VM and
+# the password for the VM. The username is azureuser. 
+# Connect via SSH with the username and password
+# and then you should be able to follow along with the video
+
+# Be sure to destroy this VM when you're done or at least deallocate the VM to
+# save on costs!

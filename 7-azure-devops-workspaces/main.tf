@@ -1,4 +1,17 @@
 #############################################################################
+# TERRAFORM CONFIG
+#############################################################################
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.0"
+    }
+  }
+}
+
+#############################################################################
 # VARIABLES
 #############################################################################
 
@@ -17,7 +30,7 @@ variable "vnet_cidr_range" {
   default = {
     development = "10.2.0.0/16"
     uat         = "10.3.0.0/16"
-    production        = "10.4.0.0/16"
+    production  = "10.4.0.0/16"
   }
 }
 
@@ -35,7 +48,7 @@ locals {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
 }
 
 #############################################################################
@@ -53,13 +66,17 @@ data "template_file" "subnet_prefixes" {
   }
 }
 
+resource "azurerm_resource_group" "vnet_main" {
+  name     = local.full_rg_name
+  location = var.location
+}
+
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
-  version             = "1.2.0"
-  resource_group_name = local.full_rg_name
-  location            = var.location
+  version             = "~> 2.0"
+  resource_group_name = azurerm_resource_group.vnet_main.name
   vnet_name           = local.full_rg_name
-  address_space       = var.vnet_cidr_range[terraform.workspace]
+  address_space       = [var.vnet_cidr_range[terraform.workspace]]
   subnet_prefixes     = data.template_file.subnet_prefixes[*].rendered
   subnet_names        = var.subnet_names
   nsg_ids             = {}
@@ -69,6 +86,8 @@ module "vnet-main" {
     costcenter  = "it"
 
   }
+
+  depends_on = [azurerm_resource_group.vnet_main]
 }
 
 #############################################################################

@@ -1,4 +1,17 @@
 #############################################################################
+# TERRAFORM CONFIG
+#############################################################################
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.0"
+    }
+  }
+}
+
+#############################################################################
 # VARIABLES
 #############################################################################
 
@@ -21,7 +34,7 @@ variable "naming_prefix" {
 ##################################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
 }
 
 ##################################################################################
@@ -86,21 +99,20 @@ data "azurerm_storage_account_sas" "state" {
 }
 
 #############################################################################
-# PROVISIONERS
+# LOCAL FILE
 #############################################################################
 
-resource "null_resource" "post-config" {
-
+resource "local_file" "post-config" {
   depends_on = [azurerm_storage_container.ct]
 
-  provisioner "local-exec" {
-    command = <<EOT
-echo 'storage_account_name = "${azurerm_storage_account.sa.name}"' >> backend-config.txt
-echo 'container_name = "terraform-state"' >> backend-config.txt
-echo 'key = "terraform.tfstate"' >> backend-config.txt
-echo 'sas_token = "${data.azurerm_storage_account_sas.state.sas}"' >> backend-config.txt
-EOT
-  }
+  filename = "${path.module}/backend-config.txt"
+  content  = <<EOF
+storage_account_name = "${azurerm_storage_account.sa.name}"
+container_name = "terraform-state"
+key = "terraform.tfstate"
+sas_token = "${data.azurerm_storage_account_sas.state.sas}"
+
+  EOF
 }
 
 ##################################################################################

@@ -1,21 +1,52 @@
+### The original Terraform marketplace item is gone! ###
+## You have two options:
+
+# 1. Run the commands from your local workstation while logged into an account in the security subscription
+# 2. Run the Terraform config in the zz-terraform-vm directory
+
+# The config in the zz-terraform-vm directory mirrors what was in the marketplace item
+# except for provisioning an MSI, which we don't use anyway
+
 #Log into the Azure CLI
 az login
 
-#Create the security environment
+# This time we are going to create resources in the security subscription
+# Be sure to select the security subscription for your SUB_NAME
+
+az account set -s SUB_NAME
+
+# If you're running in the remote Terraform VM you'll need to copy the main.tf contents 
+# over to the VM. If you're running locally, you can simply navigate to the 2-sec-vnet directory
+# and run the commands from there. You won't be using the storage account for the remote backend, b/c
+# it doesn't exist.
+
+# Copy the ~/tfTemplate/remoteState.tf file to the working directory
+cp ~/tfTemplate/remoteState.tf .
+
+# Create the security environment
 terraform init
 terraform plan -out sec.tfplan
 terraform apply sec.tfplan
 
+# We're going to need the contents of the next-step.txt file for the next section
+# Run the following command to get the contents
 cat next-step.txt
 
-#Run the export commands in the text file
+#####################################################################################################
 
-#Then run the standard 
-terraform init
-terraform plan -out vnet.tfplan
-terraform apply "vnet.tfplan"
+# Now we are going to create the peering connection
 
-#Now copy in the VNet peering components
-#Rerun the plan and apply to update the config
-terraform plan -out vnet.tfplan
+# These commands are run from the Cloud Shell
+# Make sure you're using the network subscription
+
+az account set -s NETWORK_SUB_NAME
+
+# Run the export commands from the next-step.txt file to prepare
+# the proper environment variables
+
+# Then copy over the contents of the 3-vnet-peering/vnet-peering.tf 
+# file to the same named file in the cloud shell 1-main-vnet directory
+
+# Run the standard plan and apply to update the config
+terraform plan -var resource_group_name=main-vnet -out vnet.tfplan 
 terraform apply "vnet.tfplan"
