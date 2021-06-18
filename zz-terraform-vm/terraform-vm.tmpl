@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# This script is meant to install Terraform and some other utilities
+# as well as create a directory and file with the remote backend config
+# for the storage account that was created from the same Terraform config
+
+# Variables used:
+# storage_account_name - the storage account name being used for state
+# access_key - the access key for the storage account
+
+# Install Terraform and other utilities
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt install terraform jq unzip -y
+
+# Install the Azure CLI 
+sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg -y
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+AZ_REPO=$(lsb_release -cs)
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+sudo apt-get update && sudo apt-get install azure-cli -y
+
+# Create a directory and the remote backend example file
+mkdir tfTemplate
+cat <<TFF > ~/tfTemplate/remoteState.tf
+terraform {
+    backend "azurerm" {
+        storage_account_name = "${storage_account_name}"
+        container_name = "terraform-state"
+        key = "prod.terraform.tfstate"
+        access_key = "${access_key}"
+    }
+}
+
+TFF
+
+EOF

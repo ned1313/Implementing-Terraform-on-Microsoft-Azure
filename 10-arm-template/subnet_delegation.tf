@@ -1,6 +1,6 @@
 resource "azurerm_subnet" "app_service" {
   name                 = "appservice"
-  resource_group_name  = azurerm_resource_group.main.name
+  resource_group_name  = azurerm_resource_group.vnet_main.name
   virtual_network_name = module.vnet-main.vnet_name
   address_prefix       = cidrsubnet(var.vnet_cidr_range[terraform.workspace], 8, length(var.subnet_names))
 

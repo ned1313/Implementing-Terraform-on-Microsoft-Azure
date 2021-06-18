@@ -1,4 +1,17 @@
 #############################################################################
+# TERRAFORM CONFIG
+#############################################################################
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.0"
+    }
+  }
+}
+
+#############################################################################
 # VARIABLES
 #############################################################################
 
@@ -21,7 +34,7 @@ variable "naming_prefix" {
 ##################################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
 }
 
 ##################################################################################
@@ -86,26 +99,20 @@ data "azurerm_storage_account_sas" "state" {
 }
 
 #############################################################################
-# PROVISIONERS
+# LOCAL FILE
 #############################################################################
 
-# Note this should be run on a system with PowerShell installed.  It will not
-# run correctly otherwise.
-
-resource "null_resource" "post-config" {
-
+resource "local_file" "post-config" {
   depends_on = [azurerm_storage_container.ct]
 
-  provisioner "local-exec" {
-    command = <<EOT
-Add-Content -Value 'storage_account_name = "${azurerm_storage_account.sa.name}"' -Path "backend-config.txt"
-Add-Content -Value 'container_name = "terraform-state"' -Path "backend-config.txt"
-Add-Content -Value 'key = "terraform.tfstate"' -Path "backend-config.txt"
-Add-Content -Value 'sas_token = "${data.azurerm_storage_account_sas.state.sas}"' -Path "backend-config.txt"
-EOT
+  filename = "${path.module}/backend-config.txt"
+  content  = <<EOF
+storage_account_name = "${azurerm_storage_account.sa.name}"
+container_name = "terraform-state"
+key = "terraform.tfstate"
+sas_token = "${data.azurerm_storage_account_sas.state.sas}"
 
-    interpreter = ["PowerShell", "-Command"]
-  }
+  EOF
 }
 
 ##################################################################################
@@ -121,5 +128,5 @@ output "resource_group_name" {
 }
 
 output "shared_access_signature" {
-  value = data.azurerm_storage_account_sas.state.sas
+  value = nonsensitive(data.azurerm_storage_account_sas.state.sas)
 }

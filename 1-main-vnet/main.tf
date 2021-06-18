@@ -1,4 +1,17 @@
 #############################################################################
+# TERRAFORM CONFIG
+#############################################################################
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.0"
+    }
+  }
+}
+
+#############################################################################
 # VARIABLES
 #############################################################################
 
@@ -32,20 +45,24 @@ variable "subnet_names" {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
 }
 
 #############################################################################
 # RESOURCES
 #############################################################################
 
+resource "azurerm_resource_group" "vnet_main" {
+  name     = var.resource_group_name
+  location = var.location
+}
+
 module "vnet-main" {
   source              = "Azure/vnet/azurerm"
-  version             = "1.2.0"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  version             = "~> 2.0"
+  resource_group_name = azurerm_resource_group.vnet_main.name
   vnet_name           = var.resource_group_name
-  address_space       = var.vnet_cidr_range
+  address_space       = [var.vnet_cidr_range]
   subnet_prefixes     = var.subnet_prefixes
   subnet_names        = var.subnet_names
   nsg_ids             = {}
@@ -55,6 +72,8 @@ module "vnet-main" {
     costcenter  = "it"
 
   }
+
+  depends_on = [azurerm_resource_group.vnet_main]
 }
 
 #############################################################################

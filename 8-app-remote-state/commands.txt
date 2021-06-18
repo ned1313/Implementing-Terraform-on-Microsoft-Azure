@@ -1,3 +1,20 @@
+# Now we're going to create a storage account and credentials for 
+# setting up remote state storage on an Azure for the application team
+
+# This is going to be run from your local workstation
+# Be sure to log in as the user you want to do application stuff
+# And select the networking subscription you've been using
+
+az account set -s NETWORK_SUB_NAME
+
+# Now we roll through the standard terraform config
+
 terraform init
 terraform plan -var resource_group_name=itma-app-state -var naming_prefix=appitma -out state.tfplan
 terraform apply "state.tfplan"
+
+# Next we're going to copy the backend-config.txt file to the 9-app-deploy
+cp backend-config.txt ../9-app-deploy/
+
+# Head over to the 9-app-deploy directory to continue
+

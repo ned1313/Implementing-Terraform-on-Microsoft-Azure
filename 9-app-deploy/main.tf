@@ -1,8 +1,15 @@
 #############################################################################
-# BACKEND
+# TERRAFORM CONFIG
 #############################################################################
 
 terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.0"
+    }
+  }
+
   backend "azurerm" {
   }
 }
@@ -44,7 +51,7 @@ locals {
 #############################################################################
 
 provider "azurerm" {
-  version = "~> 1.0"
+  features {}
 }
 
 #############################################################################
@@ -54,11 +61,12 @@ provider "azurerm" {
 data "azurerm_subscription" "current" {}
 
 data "terraform_remote_state" "networking" {
-  backend = "azurerm"
+  backend   = "azurerm"
+  workspace = terraform.workspace
   config = {
     storage_account_name = var.network_state["sa"]
     container_name       = var.network_state["cn"]
-    key                  = "${var.network_state["key"]}env:${terraform.workspace}"
+    key                  = var.network_state["key"]
     sas_token            = var.network_state["sts"]
   }
 }
@@ -116,9 +124,8 @@ resource "azurerm_lb" "app" {
 }
 
 resource "azurerm_lb_backend_address_pool" "app" {
-  resource_group_name = azurerm_resource_group.app.name
-  loadbalancer_id     = azurerm_lb.app.id
-  name                = "${local.prefix}-app"
+  loadbalancer_id = azurerm_lb.app.id
+  name            = "${local.prefix}-app"
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "app" {
@@ -147,7 +154,7 @@ resource "azurerm_virtual_machine" "main" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
   storage_os_disk {

@@ -1,1 +1,17 @@
-terraform init -backend-config=backend-config.txt
+# These commands should be run from the Cloud Shell session
+# We're going to go to the terraform/1-main-vnet directory and
+# create a backend.tf file and then copy the contents of the 
+# 5-remote-state/backend.tf file into it
+
+cd ~/terraform/1-main-vnet
+code backend.tf
+
+# Now we're going to copy the backend-config.txt file from the 
+# ~/terraform/remote-state/ directory
+
+cp ../remote-state/backend-config.txt .
+
+# Lastly, we'll migrate the local state of our config to
+# a remote state location
+
+terraform init -backend-config="backend-config.txt"

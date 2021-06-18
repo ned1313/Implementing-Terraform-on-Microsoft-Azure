@@ -1,0 +1,68 @@
+# Now we are going to use Azure DevOps pipelines.
+# You're going to need to have set up a project in Azure DevOps with
+# pipelines and repos enabled.
+
+# In Repos, initialize a main branch by clicking on initialize
+
+# Create two directories, one called networking and the other
+# called pipelines
+
+# Copy the contents of 7-azure-devops-workspaces into the networking folder
+# and the contents of 6-azuredevops into the pipelines folder
+
+# Edit the terraform.tfvars.example file with the correct values
+# and rename it to terraform.tfvars
+
+# Now you have a choice... you can set up the pipeline using the legacy GUI as
+# shown in the video, or you can create the pipeline from the YAML files in 
+# the pipelines directory.
+
+# If you choose to follow the video, happy viewing!
+
+# If you choose to use the pipelines folder, do the following:
+
+# Create variables for use by the pipeline
+# Create a variable group called globomantics
+# Create variables
+# storage_account_name - set to the storage account name created earlier
+# sas_token - set to the SAS token create earlier and set to secret
+# sec_client_secret - the client secret for the security service principal set to secret
+
+# Create a service connection 
+# Go to project settings, pipelines, service connections
+# Create a service connection to the Networking Subscription
+# Connection type is Azure Resource Manager
+# Detection type is Service Principal
+# Select the proper Subscription
+# Name the service connection Networking_Sub
+# Go into the properties of the service connection and change the role assignment 
+# of the service principal that was created. 
+# This will take you to the Azure Subscription IAM page
+# Find the name of the service principal in Role Assignments 
+# Add a new Role Assignment and grant the service principal Owner rights on the Subscription
+
+# Create a new Pipeline!
+# Select Azure Repos Git for the code location
+# Select the globomantics-test repo you created earlier
+# Select existing azure pipelines YAML file
+# Pick the azure-pipelines.yaml file 
+# Try running the file!
+
+# Sometimes the run will fail the first time b/c the role assignment hasn't propagated
+# Just run it again and it should be fine
+
+# Once the development run succeeds, add in the yaml in the uat-pipeline.yaml file to
+# the azure-pipelines.yaml file in the Repo and run the pipeline again. Check and watch it deploy!
+
+# Finally, add the yaml from the production-pipeline.yaml file to
+# the azure-pipelines.yaml file in the Repo and run the pipeline again. Check and watch it deploy!
+
+# Now we are going to add an approval for production
+# Go to environments under Pipelines
+# Select Production and click on the More Actions menu
+# Add yourself as an approver
+
+# This time it should pause before apply and wait for approval, good times...
+
+# Now you can make a change to the main.tf file in the Repo and watch it roll through
+# each environment. Pretty sweet I know.

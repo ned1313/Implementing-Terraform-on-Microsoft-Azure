@@ -1,0 +1,18 @@
+# Next we're going to update the networking config with a subnet delegation
+# Upload the 10-arm-template/subnet_delegation.tf file to the networking
+# directory in the Azure DevOps Repo
+
+# Adding the file should kick off a pipeline run
+# Approve the Production deployment and let the pipeline finish
+
+# Now we've set the stage for deploying the arm template
+# Copy the template and template-deploy.tf files over to 9-app-deploy
+cp template-deploy.tf ../9-app-deploy/
+cp azuredeploy.json ../9-app-deploy/
+
+# Now we'll run the template deploy
+
+terraform plan -out app.tfplan
+terraform apply "app.tfplan"
+
+# Rinse and repeat for the other workspaces

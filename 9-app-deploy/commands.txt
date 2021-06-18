@@ -1,4 +1,19 @@
+# You're going to need a SAS token to access the networking state storage account
+# Go to the portal and generate it like you see in the video
+
+# Now make a copy of the terraform.tfvars.example file
+cp terraform.tfvars.example terraform.tfvars
+
+# Open the file and fill out all the fields
+# The CONTAINER_NAME and STATE_FILE_KEY should be 
+# terraform-state and terraform.tfstate 
+
+# Now that we have our variables set up, we can run the usual
+# Terraform commands
+
 terraform init --backend-config=backend-config.txt
 terraform workspace new development
 terraform plan -out app.tfplan
 terraform apply "app.tfplan"
+
+# You can repeat for the uat and production environments if you want

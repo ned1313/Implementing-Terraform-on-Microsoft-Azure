@@ -1,3 +1,24 @@
+# Now we're going to create a storage account and credentials for 
+# setting up remote state storage on an Azure
+
+# This is going to be run from the Cloud Shell, so you're going to 
+# create a ~/terraform/remote-state directory and then copy the contents
+# of the 4-remote-state-prep/main.tf file into a main.tf file in Cloud Shell
+
+cd terraform/
+mkdir remote-state
+cd remote-state
+code main.tf
+
+# Make sure you're running in the network subscription
+
+az account set -s NETWORK_SUB_NAME
+
+# Now we roll through the standard terraform config
+
 terraform init
 terraform plan -var resource_group_name=itma-state -out state.tfplan
 terraform apply "state.tfplan"
+
+# Next we're going to copy the backend-config.txt file to the 1-main-vnet
+# Head over to the 5-remote-state directory to continue

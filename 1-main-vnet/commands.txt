@@ -1,3 +1,5 @@
+# First we are going to deploy resources in our networking subscription
+# Be sure to select the networking subscription for your subname
 az account show
 az account set --subscription SUB_NAME
 

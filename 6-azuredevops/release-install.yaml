@@ -1,5 +1,0 @@
-steps:
-- task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-  displayName: 'Use Terraform 0.12.9'
-  inputs:
-    terraformVersion: 0.12.9

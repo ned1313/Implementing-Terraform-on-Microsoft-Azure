@@ -1,0 +1,59 @@
+- stage: uat
+  displayName: uat
+  jobs:
+  - deployment: deploy
+    environment: uat
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: TerraformInstaller@0
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: 'latest'
+      
+          # Init
+          - task: TerraformCLI@0
+            displayName: Initialize Terraform
+            env:
+              ARM_SAS_TOKEN: $(sas_token)
+            inputs:
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/networking'
+              commandOptions: '-backend-config=storage_account_name=$(storage_account_name) -backend-config=container_name="terraform-state" -backend-config=key="terraform.tfstate"'
+              backendType: 'selfConfigured'
+      
+          # Check for workspace
+          - task: Bash@3
+            displayName: Check for Workspace
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(System.DefaultWorkingDirectory)/networking/workspacetest.sh'
+              arguments: '$(Environment.Name)'
+      
+          - task: TerraformCLI@0
+            displayName: Plan Terraform Deployment
+            env:
+              TF_WORKSPACE: '$(Environment.Name)'
+              TF_VAR_sec_client_secret: $(sec_client_secret)
+              ARM_SAS_TOKEN: $(sas_token)
+            inputs:
+              command: 'plan'
+              commandOptions: '-out main.tfplan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/networking'
+              environmentServiceName: 'Networking_Sub'
+      
+          - task: TerraformCLI@0
+            displayName: Apply Terraform Deployment
+            env:
+              TF_WORKSPACE: '$(Environment.Name)'
+              TF_VAR_sec_client_secret: $(sec_client_secret)
+              ARM_SAS_TOKEN: $(sas_token)
+            inputs:
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/networking'
+              commandOptions: 'main.tfplan'
+              environmentServiceName: 'Networking_Sub'
