@@ -37,7 +37,7 @@ variable "subnet_prefixes" {
 
 variable "subnet_names" {
   type    = list(string)
-  default = ["web", "database"]
+  default = ["subnet-web", "subnet-database"]
 }
 
 #############################################################################
