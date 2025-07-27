@@ -55,11 +55,15 @@
 # You will need to grant access to the development environment and globomantics variable group
 
 
-# Once the development run succeeds, add in the yaml in the uat-pipeline.yaml file to
+# Once the development run succeeds, create a uat environment.
+# Then add in the yaml in the uat-pipeline.yaml file to
 # the azure-pipelines.yaml file in the Repo and run the pipeline again. Check and watch it deploy!
+# You'll need to grant access to the uat environment
 
-# Finally, add the yaml from the production-pipeline.yaml file to
+# Finally, create a production environment and add the yaml from the production-pipeline.yaml file to
 # the azure-pipelines.yaml file in the Repo and run the pipeline again. Check and watch it deploy!
+# You'll need to grant access to the uat environment
+
 
 # Now we are going to add an approval for production
 # Go to environments under Pipelines

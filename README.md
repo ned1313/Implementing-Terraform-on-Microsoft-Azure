@@ -43,8 +43,7 @@ The course includes use of the AzureAD provider, and it assumes that you have pe
 
 ### Azure DevOps Subscription
 
-The course also makes use of Azure DevOps Repos and Pipelines. The basic Azure DevOps plan is free for up to five users. You will also need to add the [Terraform Build & Release Tasks](https://marketplace.visualstudio.com/items?itemName=charleszipp.azure-pipelines-tasks-terraform) extension from the Visual Studio Marketplace.
-
+The course also makes use of Azure DevOps Repos and Pipelines. The basic Azure DevOps plan is free for up to five users. You will also need to add the [Terraform Tasks](https://marketplace.visualstudio.com/items?itemName=ms-devlabs.custom-terraform-tasks) extension from the Visual Studio Marketplace.
 
 ## MONEY!!!
 
@@ -54,7 +53,7 @@ Each module builds on the previous one to create a complete deployment for the G
 
 ## Conclusion
 
-I hope you enjoy taking this course as much as I did creating it.  I'd love to hear feedback and suggestions for revisions. Log an issue on this repo or hit me up on [Twitter](https://twitter.com/ned1313).
+I hope you enjoy taking this course as much as I did creating it.  I'd love to hear feedback and suggestions for revisions. Log an issue on this repo or hit me up on [LinkedIn](https://www.linkedin.com/in/ned-bellavance/).
 
 Thanks and happy automating!
 
