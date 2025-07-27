@@ -32,8 +32,10 @@
 # Go to project settings, pipelines, service connections
 # Create a service connection to the Networking Subscription
 # Connection type is Azure Resource Manager
-# Detection type is Service Principal
+# Identity type is App registration (automatic)
+# Credential type is Secret (required for v2 of the azurerm provider)
 # Select the proper Subscription
+# Grant access to all pipelines
 # Name the service connection Networking_Sub
 # Go into the properties of the service connection and change the role assignment 
 # of the service principal that was created. 
@@ -50,6 +52,8 @@
 
 # Sometimes the run will fail the first time b/c the role assignment hasn't propagated
 # Just run it again and it should be fine
+# You will need to grant access to the development environment and globomantics variable group
+
 
 # Once the development run succeeds, add in the yaml in the uat-pipeline.yaml file to
 # the azure-pipelines.yaml file in the Repo and run the pipeline again. Check and watch it deploy!
